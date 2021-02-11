@@ -7,7 +7,7 @@
   <arg name="tf_prefix" default="ur_arm_" doc="tf_prefix used for the robot."/>
   <arg name="controller_config_file" default="$(find husky_launch)/config/ur5_controllers.yaml" doc="Config file used for defining the ROS-Control controllers."/>
   <arg name="use_tool_communication" default="false"/>
-  <arg name="kinematics_config" default="$(find husky_launch)/config/ur_kinematics_config.yaml"/>
+  <arg name="kinematics_config" default="$(find husky_launch)/config/ur5_kinematics_config.yaml"/>
   <arg name="controllers" default="joint_state_controller arm_controller speed_scaling_state_controller force_torque_sensor_controller" doc="Controllers that are activated by default."/>
 
   <arg name="debug" default="false" doc="Debug flag that will get passed on to ur_control.launch"/>
