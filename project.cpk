@@ -1,0 +1,9 @@
+{
+    "description": "CPK project for UR5-equipped Husky",
+    "maintainer": "Chip Schaff",
+    "name": "husky_ur5_docker",
+    "organization": "cbschaff",
+    "schema": "1.0",
+    "template": null,
+    "version": "0.0.0"
+}

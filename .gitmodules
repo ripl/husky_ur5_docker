@@ -1,7 +1,6 @@
 [submodule "packages/Universal_Robots_ROS_Driver"]
 	path = packages/Universal_Robots_ROS_Driver
 	url = https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
-[submodule "packages/fmauch_universal_robot"]
-	path = packages/fmauch_universal_robot
-	url = https://github.com/fmauch/universal_robot.git
-	branch = calibration_devel
+[submodule "packages/universal_robot"]
+	path = packages/universal_robot
+	url = https://github.com/ripl/universal_robot.git

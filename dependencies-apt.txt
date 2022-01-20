@@ -11,8 +11,13 @@ ros-noetic-controller-manager-msgs
 ros-noetic-industrial-robot-status-controller
 ros-noetic-joint-state-controller
 ros-noetic-joint-trajectory-controller
+ros-noetic-scaled-joint-trajectory-controller
+ros-noetic-speed-scaling-interface
+ros-noetic-speed-scaling-state-controller
 ros-noetic-force-torque-sensor-controller
+ros-noetic-pass-through-controllers
 ros-noetic-velocity-controllers
 ros-noetic-moveit-core
 ros-noetic-moveit-kinematics
+ros-noetic-tf-conversions
 ros-noetic-industrial-robot-status-interface

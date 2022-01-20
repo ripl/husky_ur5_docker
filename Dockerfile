@@ -1,84 +1,88 @@
 # parameters
-ARG REPO_NAME="husky_ur5_docker"
-ARG DESCRIPTION="Container for Universal_Robots_ROS_Driver"
-ARG MAINTAINER="<Chip Schaff> (cbschaff@ttic.edu)"
-# pick an icon from: https://fontawesome.com/v4.7.0/icons/
-ARG ICON="cube"
+ARG ARCH
+ARG NAME
+ARG ORGANIZATION
+ARG DESCRIPTION
+ARG MAINTAINER
 
 # ==================================================>
 # ==> Do not change the code below this line
-ARG ARCH=arm32v7
-ARG DISTRO=daffy
-ARG BASE_TAG=${DISTRO}-${ARCH}
-ARG BASE_IMAGE=dt-ros-commons
-ARG LAUNCHER=default
+ARG BASE_REGISTRY=docker.io
+ARG BASE_ORGANIZATION=ripl
+ARG BASE_REPOSITORY=ros-base
+ARG BASE_TAG=noetic
 
 # define base image
-FROM duckietown/${BASE_IMAGE}:${BASE_TAG} as BASE
+FROM ${BASE_REGISTRY}/${BASE_ORGANIZATION}/${BASE_REPOSITORY}:${BASE_TAG}-${ARCH} as BASE
 
 # recall all arguments
-ARG ARCH
-ARG DISTRO
-ARG REPO_NAME
+# - current project
+ARG NAME
+ARG ORGANIZATION
 ARG DESCRIPTION
 ARG MAINTAINER
-ARG ICON
+# - base project
+ARG BASE_REGISTRY
+ARG BASE_ORGANIZATION
+ARG BASE_REPOSITORY
 ARG BASE_TAG
-ARG BASE_IMAGE
-ARG LAUNCHER
+# - defaults
+ARG LAUNCHER=default
 
-# check build arguments
-RUN dt-build-env-check "${REPO_NAME}" "${MAINTAINER}" "${DESCRIPTION}"
-
-# define/create repository path
-ARG REPO_PATH="${CATKIN_WS_DIR}/src/${REPO_NAME}"
-ARG LAUNCH_PATH="${LAUNCH_DIR}/${REPO_NAME}"
-RUN mkdir -p "${REPO_PATH}"
-RUN mkdir -p "${LAUNCH_PATH}"
-WORKDIR "${REPO_PATH}"
+# define/create project paths
+ARG PROJECT_PATH="${CPK_SOURCE_DIR}/${NAME}"
+ARG PROJECT_LAUNCHERS_PATH="${CPK_LAUNCHERS_DIR}/${NAME}"
+RUN mkdir -p "${PROJECT_PATH}"
+RUN mkdir -p "${PROJECT_LAUNCHERS_PATH}"
+WORKDIR "${PROJECT_PATH}"
 
 # keep some arguments as environment variables
-ENV DT_MODULE_TYPE "${REPO_NAME}"
-ENV DT_MODULE_DESCRIPTION "${DESCRIPTION}"
-ENV DT_MODULE_ICON "${ICON}"
-ENV DT_MAINTAINER "${MAINTAINER}"
-ENV DT_REPO_PATH "${REPO_PATH}"
-ENV DT_LAUNCH_PATH "${LAUNCH_PATH}"
-ENV DT_LAUNCHER "${LAUNCHER}"
+ENV \
+    CPK_PROJECT_NAME="${NAME}" \
+    CPK_PROJECT_DESCRIPTION="${DESCRIPTION}" \
+    CPK_PROJECT_MAINTAINER="${MAINTAINER}" \
+    CPK_PROJECT_PATH="${PROJECT_PATH}" \
+    CPK_PROJECT_LAUNCHERS_PATH="${PROJECT_LAUNCHERS_PATH}" \
+    CPK_LAUNCHER="${LAUNCHER}"
 
 # install apt dependencies
-COPY ./dependencies-apt.txt "${REPO_PATH}/"
-RUN dt-apt-install ${REPO_PATH}/dependencies-apt.txt
+COPY ./dependencies-apt.txt "${PROJECT_PATH}/"
+RUN cpk-apt-install ${PROJECT_PATH}/dependencies-apt.txt
 
 # install python3 dependencies
-COPY ./dependencies-py3.txt "${REPO_PATH}/"
-RUN pip3 install --use-feature=2020-resolver -r ${REPO_PATH}/dependencies-py3.txt
-
-# copy the source code
-COPY ./packages "${REPO_PATH}/packages"
-
-# build packages
-RUN . /opt/ros/${ROS_DISTRO}/setup.sh && \
-  catkin build \
-    --workspace ${CATKIN_WS_DIR}/
+COPY ./dependencies-py3.txt "${PROJECT_PATH}/"
+RUN cpk-pip3-install ${PROJECT_PATH}/dependencies-py3.txt
 
 # install launcher scripts
-COPY ./launchers/. "${LAUNCH_PATH}/"
-COPY ./launchers/default.sh "${LAUNCH_PATH}/"
-RUN dt-install-launchers "${LAUNCH_PATH}"
+COPY ./launchers/. "${PROJECT_LAUNCHERS_PATH}/"
+COPY ./launchers/default.sh "${PROJECT_LAUNCHERS_PATH}/"
+RUN cpk-install-launchers "${PROJECT_LAUNCHERS_PATH}"
+
+# copy project root
+COPY ./*.cpk ./*.sh ${PROJECT_PATH}/
+
+# copy the source code
+COPY ./packages "${CPK_PROJECT_PATH}/packages"
+
+# build catkin workspace
+RUN catkin build \
+    --workspace ${CPK_CODE_DIR}
+
+# install packages dependencies
+# RUN cpk-install-packages-dependencies
 
 # define default command
-CMD ["bash", "-c", "dt-launcher-${DT_LAUNCHER}"]
+CMD ["bash", "-c", "launcher-${CPK_LAUNCHER}"]
 
 # store module metadata
-LABEL org.duckietown.label.module.type="${REPO_NAME}" \
-    org.duckietown.label.module.description="${DESCRIPTION}" \
-    org.duckietown.label.module.icon="${ICON}" \
-    org.duckietown.label.architecture="${ARCH}" \
-    org.duckietown.label.code.location="${REPO_PATH}" \
-    org.duckietown.label.code.version.distro="${DISTRO}" \
-    org.duckietown.label.base.image="${BASE_IMAGE}" \
-    org.duckietown.label.base.tag="${BASE_TAG}" \
-    org.duckietown.label.maintainer="${MAINTAINER}"
+LABEL \
+    cpk.label.current="${ORGANIZATION}.${NAME}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.description="${DESCRIPTION}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.code.location="${PROJECT_PATH}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.base.registry="${BASE_REGISTRY}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.base.organization="${BASE_ORGANIZATION}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.base.project="${BASE_REPOSITORY}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.base.tag="${BASE_TAG}" \
+    cpk.label.project.${ORGANIZATION}.${NAME}.maintainer="${MAINTAINER}"
 # <== Do not change the code above this line
 # <==================================================
