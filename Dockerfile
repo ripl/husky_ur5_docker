@@ -9,8 +9,8 @@ ARG MAINTAINER
 # ==> Do not change the code below this line
 ARG BASE_REGISTRY=docker.io
 ARG BASE_ORGANIZATION=ripl
-ARG BASE_REPOSITORY=ros-base
-ARG BASE_TAG=noetic
+ARG BASE_REPOSITORY=libbot2-ros-docker
+ARG BASE_TAG=cpk
 
 # define base image
 FROM ${BASE_REGISTRY}/${BASE_ORGANIZATION}/${BASE_REPOSITORY}:${BASE_TAG}-${ARCH} as BASE
@@ -86,3 +86,5 @@ LABEL \
     cpk.label.project.${ORGANIZATION}.${NAME}.maintainer="${MAINTAINER}"
 # <== Do not change the code above this line
 # <==================================================
+
+ENV ROS_HOSTNAME "base1.local"

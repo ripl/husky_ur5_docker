@@ -4,3 +4,4 @@
 #       use it to configure your environment.
 
 source /code/devel/setup.bash
+export ROS_HOSTNAME=base1.local
