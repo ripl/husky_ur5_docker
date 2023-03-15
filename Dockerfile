@@ -46,6 +46,7 @@ ENV \
     CPK_LAUNCHER="${LAUNCHER}"
 
 # install apt dependencies
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 42D5A192B819C5DA
 COPY ./dependencies-apt.txt "${PROJECT_PATH}/"
 RUN cpk-apt-install ${PROJECT_PATH}/dependencies-apt.txt
 

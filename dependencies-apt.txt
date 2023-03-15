@@ -24,3 +24,8 @@ ros-noetic-industrial-robot-status-interface
 
 # Necessary for cartesian control
 ros-noetic-cartesian-trajectory-controller
+
+ros-noetic-rosbridge-server
+ros-noetic-tf2-web-republisher
+
+tmux
