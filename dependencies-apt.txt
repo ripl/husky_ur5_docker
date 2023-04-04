@@ -22,8 +22,9 @@ ros-noetic-moveit-kinematics
 ros-noetic-tf-conversions
 ros-noetic-industrial-robot-status-interface
 
-# Necessary for cartesian control
+# Additional controllers
 ros-noetic-cartesian-trajectory-controller
+ros-noetic-twist-controller
 
 ros-noetic-rosbridge-server
 ros-noetic-tf2-web-republisher

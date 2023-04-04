@@ -12,7 +12,7 @@
   <arg name="debug" default="false" doc="Debug flag that will get passed on to ur_control.launch"/>
   <arg name="reverse_port" default="50001" doc="Port that will be opened by the driver to allow direct communication between the driver and the robot controller."/>
   <arg name="script_sender_port" default="50002" doc="The driver will offer an interface to receive the program's URScript on this port. If the robot cannot connect to this port, `External Control` will stop immediately."/>
-  <arg name="stopped_controllers" default="joint_group_vel_controller forward_joint_traj_controller forward_cartesian_traj_controller" doc="Controllers that are initally loaded, but not started."/>
+  <arg name="stopped_controllers" default="joint_group_vel_controller forward_joint_traj_controller forward_cartesian_traj_controller twist_controller" doc="Controllers that are initally loaded, but not started."/>
   <arg name="tool_voltage" default="0" doc="Tool voltage set at the beginning of the UR program. Only used, when `use_tool_communication` is set to true."/>
   <arg name="tool_parity" default="0" doc="Parity configuration used for tool communication. Only used, when `use_tool_communication` is set to true."/>
   <arg name="tool_baud_rate" default="115200" doc="Baud rate used for tool communication. Only used, when `use_tool_communication` is set to true."/>
