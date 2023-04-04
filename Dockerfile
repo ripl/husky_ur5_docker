@@ -65,9 +65,8 @@ COPY ./*.cpk ./*.sh ${PROJECT_PATH}/
 # copy the source code
 COPY ./packages "${CPK_PROJECT_PATH}/packages"
 
-# build catkin workspace
-RUN catkin build \
-    --workspace ${CPK_CODE_DIR}
+# HACK: I don't know, but we need bash to run this.
+RUN /bin/bash -c "catkin build --workspace ${CPK_CODE_DIR}"
 
 # install packages dependencies
 # RUN cpk-install-packages-dependencies
